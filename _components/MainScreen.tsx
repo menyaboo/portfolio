@@ -9,19 +9,19 @@ export function MainScreen({gameMode}: Props): JSX.Element {
   const [cubesAmount, setCubesAmount] = useState(0)
   const [cubesAnimateDelay, setCubesAnimateDelay] = useState(0)
   const [isLoading, setValueLoading] = useState(true);
-  const [cubes, setCubes] = useState(document?.querySelectorAll('.main__cube'));
+  const [cubes, setCubes] = useState( typeof document !== 'undefined' ? document.querySelectorAll('.main__cube') : []);
 
   //логика отрисовки кубов в начале рендера страницы
   useEffect(() => {
-    const row = getComputedStyle(document?.documentElement).getPropertyValue('--cubes-animate-amount-in-row');
-    const col = getComputedStyle(document?.documentElement).getPropertyValue('--cubes-animate-amount-in-column');
-    const delay = getComputedStyle(document?.documentElement).getPropertyValue('--cubes-animate-delay-show-new-cube');
+    const row = getComputedStyle(document.documentElement).getPropertyValue('--cubes-animate-amount-in-row');
+    const col = getComputedStyle(document.documentElement).getPropertyValue('--cubes-animate-amount-in-column');
+    const delay = getComputedStyle(document.documentElement).getPropertyValue('--cubes-animate-delay-show-new-cube');
     setCubesAmount( +row * +col)
 
     if (cubesAmount != 0 && cubes.length == 0) {
       setValueLoading(false)
       setCubesAnimateDelay(+delay)
-      setCubes(document?.querySelectorAll('.main__cube'))
+      setCubes(document.querySelectorAll('.main__cube'))
     }
   })
 
@@ -37,7 +37,7 @@ export function MainScreen({gameMode}: Props): JSX.Element {
 
     //выборка кубика без анимации
     function getCubeNoAnimateFade() {
-      const cubesAnimate = document?.querySelectorAll('.main__cube-fade')
+      const cubesAnimate = document.querySelectorAll('.main__cube-fade')
       let cubesAnimateIndex: Array<number> = []
       //@ts-ignore
       cubesAnimate.forEach(el => cubesAnimateIndex.push(el.dataset.key))
@@ -86,9 +86,6 @@ export function MainScreen({gameMode}: Props): JSX.Element {
           ))}
           <div className={'main__content'}>
             <h1>Законченная сверх неебистовая хуетень</h1>
-            {Array.from({ length: 5 }, (_, i) => i++).map((key: number) => (
-              <span key={key}>{key}</span>
-            ))}
           </div>
         </div>
       }
