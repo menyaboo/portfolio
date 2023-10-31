@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-color: #F8F9FA;
+  --background-color: #212529;
+
+  //cubes animate
+  --cubes-animate-amount-in-row: 21;
+  --cubes-animate-amount-in-column: 9;
+  --cubes-animate-delay-show-new-cube: 300;
+  --cubes-animate-delay-show: .1s;
+  --cubes-animate-delay-fade: .8s;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: var(--foreground-color);
+  background: var(--background-color);
+}
+
+.main {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--cubes-animate-amount-in-row), auto);
+  grid-template-rows: repeat(var(--cubes-animate-amount-in-column), auto);
+  min-height: 300px;
+  width: 100%;
+
+  .main__cube {
+    height: calc((100svw / var(--cubes-animate-amount-in-row)));
+    width: 100%;
+    background-color: #495057;
+    opacity: 0;
+  }
+
+  .main__cube-show {
+    &:hover {
+      opacity: 1;
+      animation: show var(--cubes-animate-delay-show) ease-out;
+    }
+
+    @keyframes show {
+      from { opacity: 0;}
+      to { opacity: 1; }
+    }
+  }
+
+  .main__cube-fade {
+    animation: fade var(--cubes-animate-delay-fade) ease-out;
+
+    @keyframes fade {
+      from { opacity: 1 }
+      10% { opacity: 1 }
+      to { opacity: 0 }
+    }
+  }
+
+  .main__content {
+    pointer-events: none;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, .3);
+
+    h1 {
+      font-size: 54px;
+      font-weight: lighter;
+    }
+  }
+}
