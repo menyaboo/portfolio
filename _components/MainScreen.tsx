@@ -1,16 +1,20 @@
 'use client'
-import {useEffect, useState} from "react";
+import {useEffect, useState} from "react"
+import picture from "@/public/img/105c3bd55040ac5aa76b67e7b1f65be9.jpg"
 
 interface Props {
   gameMode: boolean
 }
 
 export function MainScreen({gameMode}: Props): JSX.Element {
+  const [isLoading, setValueLoading] = useState(true);
   const [cubesAmount, setCubesAmount] = useState(0)
+  const [cubes, setCubes] =
+    useState( typeof document !== 'undefined' ? document.querySelectorAll('.main__cubes-cube') : []);
+  const [screenContent, setScreenContent] = useState(true);
+
   const [isAnimate, setValueAnimate] = useState(true)
   const [cubesAnimateDelay, setCubesAnimateDelay] = useState(0)
-  const [isLoading, setValueLoading] = useState(true);
-  const [cubes, setCubes] = useState( typeof document !== 'undefined' ? document.querySelectorAll('.main__cube') : []);
 
   //логика отрисовки кубов в начале рендера страницы
   useEffect(() => {
@@ -22,14 +26,14 @@ export function MainScreen({gameMode}: Props): JSX.Element {
     if (cubesAmount != 0 && cubes.length == 0) {
       setValueLoading(false)
       setCubesAnimateDelay(+delay)
-      setCubes(document.querySelectorAll('.main__cube'))
+      setCubes(document.querySelectorAll('.main__cubes-cube'))
     }
   })
 
   //useEffect для анимации кубиков
   useEffect(() => {
     // проверка отрисованны ли кубы
-    if (cubes.length == 0) return
+    if (isLoading) return
     if (!isAnimate) return
 
     //возвращает рандомное число
@@ -39,7 +43,7 @@ export function MainScreen({gameMode}: Props): JSX.Element {
 
     //выборка кубика без анимации
     function getCubeNoAnimateFade() {
-      const cubesAnimate = document.querySelectorAll('.main__cube-fade')
+      const cubesAnimate = document.querySelectorAll('.main__cubes-cube_fade')
       let cubesAnimateIndex: Array<number> = []
       //@ts-ignore
       cubesAnimate.forEach(el => cubesAnimateIndex.push(el.dataset.key))
@@ -52,19 +56,29 @@ export function MainScreen({gameMode}: Props): JSX.Element {
     }
 
     //анимация кубика
-    const animateCube = () => cubes[getCubeNoAnimateFade()].classList.add('main__cube-fade')
+    const animateCube = () => cubes[getCubeNoAnimateFade()].classList.add('main__cubes-cube_fade')
     //с определенным интервалом (cubesAnimateDelay / in root) выбираем кубик и анимируем
     const animate = setInterval(() => animateCube(), cubesAnimateDelay)
     return () => clearInterval(animate)
   })
 
-  const cubeMouseEnter = (e: any) => e.target.classList.add('main__cube-show')
+  //логика для змейки (gameMode is true)
+  useEffect(() => {
+    if (isLoading) return
+
+    function getIndexCube(x: number, y: number) {
+
+    }
+  })
+
+  //фунуции интерактива
+  const cubeMouseEnter = (e: any) => e.target.classList.add('main__cubes-cube_show')
   function cubeMouseLeave(e: any) {
-    e.target.classList.remove('main__cube-show')
-    e.target.classList.add('main__cube-fade')
+    e.target.classList.remove('main__cubes-cube_show')
+    e.target.classList.add('main__cubes-cube_fade')
   }
   function clearAnimateFade(e: any) {
-    e.target.classList.remove('main__cube-fade')
+    e.target.classList.remove('main__cubes-cube_fade')
   }
 
   return (
@@ -75,28 +89,42 @@ export function MainScreen({gameMode}: Props): JSX.Element {
 
           </div>
         </div> :
-        <div
-          onMouseEnter={() => setValueAnimate(false)}
-          onMouseLeave={() => setValueAnimate(true)}
-          className={'main'}>
-          {Array.from({ length: cubesAmount }, (_, i) => i++).map((key: number) => (
-            <span
-              data-key={key}
-              key={key}
-              className={'main__cube'}
-              onMouseEnter={(e) => cubeMouseEnter(e)}
-              onMouseLeave={(e) => cubeMouseLeave(e)}
-              onAnimationEnd={(e) => clearAnimateFade(e) /*убираем класс анимации когда она отработала*/}
-            ></span>
-          ))}
-          <div className={'main__content'}>
-            <h1>Законченная сверх неебистовая хуетень</h1>
+        <div className={'main'}>
+          <div className={'main__cubes'}
+            onMouseEnter={() => setValueAnimate(false)}
+            onMouseLeave={() => setValueAnimate(true)}>
+
+            {Array.from({ length: cubesAmount }, (_, i) => i++).map((key: number) => (
+              <span
+                data-key={key}
+                key={key}
+                className={'main__cubes-cube'}
+                onMouseEnter={(e) => cubeMouseEnter(e)}
+                onMouseLeave={(e) => cubeMouseLeave(e)}
+                onAnimationEnd={(e) => clearAnimateFade(e) /*убираем класс анимации когда она отработала*/}
+              ></span>
+            ))}
           </div>
+
+          {!screenContent ||
+            <div className={'main__content'}>
+              <div className={'container mx-auto'}>
+                <div className={'main__content-title'}>
+                  <h1 className="glitch" data-text="menyaeboot">menyaboo</h1>
+                  <p><span style={{color: '#52525b'}}>//TODO// </span>{'___'}Расписать чтото ахереть какое важное о себе</p>
+                </div>
+              </div>
+              <div className={'main__picture'}
+                   style={{
+                     backgroundImage: `url(${picture.src})`,
+                   }}
+              ></div>
+            </div>
+          }
+
+          <div onClick={() => setScreenContent(!screenContent)} className={'main__drop-menu'}></div>
         </div>
       }
-      <div className={'h-[100vh]'}>
-
-      </div>
     </main>
   )
 }
