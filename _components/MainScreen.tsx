@@ -7,6 +7,7 @@ interface Props {
 
 export function MainScreen({gameMode}: Props): JSX.Element {
   const [cubesAmount, setCubesAmount] = useState(0)
+  const [isAnimate, setValueAnimate] = useState(true)
   const [cubesAnimateDelay, setCubesAnimateDelay] = useState(0)
   const [isLoading, setValueLoading] = useState(true);
   const [cubes, setCubes] = useState( typeof document !== 'undefined' ? document.querySelectorAll('.main__cube') : []);
@@ -29,6 +30,7 @@ export function MainScreen({gameMode}: Props): JSX.Element {
   useEffect(() => {
     // проверка отрисованны ли кубы
     if (cubes.length == 0) return
+    if (!isAnimate) return
 
     //возвращает рандомное число
     function getRandomInt(max: number) {
@@ -70,10 +72,13 @@ export function MainScreen({gameMode}: Props): JSX.Element {
       {isLoading ?
         <div className={'main'}>
           <div className={'main__content'}>
-            <h1>Хуета грузит</h1>
+
           </div>
         </div> :
-        <div className={'main'}>
+        <div
+          onMouseEnter={() => setValueAnimate(false)}
+          onMouseLeave={() => setValueAnimate(true)}
+          className={'main'}>
           {Array.from({ length: cubesAmount }, (_, i) => i++).map((key: number) => (
             <span
               data-key={key}

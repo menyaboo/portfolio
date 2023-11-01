@@ -4,6 +4,7 @@
 
 :root {
   --foreground-color: #F8F9FA;
+  --foreground-color-secondery: #ccc;
   --background-color: #212529;
 
   //cubes animate
@@ -20,14 +21,59 @@
   }
 }
 
+@keyframes show {
+  from { opacity: 0;}
+  to { opacity: 1; }
+}
+
+@keyframes fade {
+  from { opacity: 1 }
+  10% {opacity: 1}
+  to { opacity: 0 }
+}
+
+@keyframes loader {
+  from { opacity: 1 }
+  50% { opacity: 1 }
+  to { opacity: 0 }
+}
+
 * {
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--background-color);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--foreground-color-secondery);
+    border-radius: 14px;
+    border: 3px solid var(--background-color);
+  }
 }
 
 body {
+  position: relative;
   color: var(--foreground-color);
   background: var(--background-color);
+}
+
+.load-screen {
+  position: absolute;
+  top: 0; left: 0;
+  height: 100svh;
+  width: 100svw;
+  background-color: var(--background-color);
+  animation: loader 2s ease-out;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .main {
@@ -35,7 +81,7 @@ body {
   display: grid;
   grid-template-columns: repeat(var(--cubes-animate-amount-in-row), auto);
   grid-template-rows: repeat(var(--cubes-animate-amount-in-column), auto);
-  min-height: 300px;
+  height: calc((100svw / var(--cubes-animate-amount-in-row) * var(--cubes-animate-amount-in-column)));
   width: 100%;
 
   .main__cube {
@@ -50,21 +96,10 @@ body {
       opacity: 1;
       animation: show var(--cubes-animate-delay-show) ease-out;
     }
-
-    @keyframes show {
-      from { opacity: 0;}
-      to { opacity: 1; }
-    }
   }
 
   .main__cube-fade {
     animation: fade var(--cubes-animate-delay-fade) ease-out;
-
-    @keyframes fade {
-      from { opacity: 1 }
-      10% { opacity: 1 }
-      to { opacity: 0 }
-    }
   }
 
   .main__content {
