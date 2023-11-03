@@ -8,13 +8,14 @@
   --foreground-color-secondery: #71717a;
   --background-color: #18181b;
   --black: #09090b;
+  --background-color-main-screen: rgba(9, 9, 11, .8);
 
   //font
   --font-size: 22px;
 
   //cubes animate
-  --cubes-animate-amount-in-row: 21;
-  --cubes-animate-amount-in-column: 7;
+  --cubes-animate-amount-in-column: 21;
+  --cubes-animate-amount-in-row: 7;
   --cubes-animate-delay-show-new-cube: 500;
   --cubes-animate-delay-show: .1s;
   --cubes-animate-delay-fade: .8s;
@@ -91,13 +92,13 @@ body {
 
   .main__cubes {
     display: grid;
-    grid-template-columns: repeat(var(--cubes-animate-amount-in-row), auto);
-    grid-template-rows: repeat(var(--cubes-animate-amount-in-column), auto);
-    height: calc((100svw / var(--cubes-animate-amount-in-row) * var(--cubes-animate-amount-in-column)));
+    grid-template-columns: repeat(var(--cubes-animate-amount-in-column), auto);
+    grid-template-rows: repeat(var(--cubes-animate-amount-in-row), auto);
+    height: calc((100svw / var(--cubes-animate-amount-in-column) * var(--cubes-animate-amount-in-row)));
   }
 
   .main__cubes-cube {
-    height: calc((100svw / var(--cubes-animate-amount-in-row)));
+    height: calc((100svw / var(--cubes-animate-amount-in-column)));
     width: 100%;
     background-color: var(--foreground-color-secondery);
     opacity: 0;
@@ -120,7 +121,7 @@ body {
     top: 0; left: 0;
     height: 100%;
     width: 100%;
-    background-color: rgb(9, 9, 11, .8);
+    background-color: var(--background-color-main-screen);
 
     .main__content-title {
       padding: 12% 0;
@@ -148,17 +149,23 @@ body {
 
   .main__picture {
     position: absolute;
-    width: 40%;
+    width: 38%;
     height: 100%;
     top: 0; right: 0;
     background-position: center;
     background-size: cover;
+    filter: grayscale(100%);
+    box-shadow:
+            inset 0 0 25px var(--background-color-main-screen),
+            inset 0 0 25px var(--background-color-main-screen),
+            inset 0 0 1000px var(--background-color-main-screen),
+            inset 0 0 25px var(--background-color-main-screen);
     z-index: -1;
   }
 }
 
 //glitch text
-$bg-color: rgb(9, 9, 11, .8);;
+$bg-color: var(--background-color-main-screen);
 $glitch-bg-color: $bg-color;
 
 .glitch {
