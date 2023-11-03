@@ -93,7 +93,9 @@ export function MainScreen({gameMode}: Props): JSX.Element {
 
   const handleKeyDown = (event: any) => {
     setPositionApple(getRandomInt(cubes.length))
+    //@ts-ignore
     cubes[positionApple].style.backgroundColor = 'red'
+    //@ts-ignore
     cubes[positionApple].style.opacity = '1'
   };
 
